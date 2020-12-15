@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 class AdController extends Controller
 {
     public function __construct(){
-        $this->middleware("auth")->except(['show','index']);
+        $this->middleware("auth")->except(['show','index','search']);
     }
 
     /**
@@ -139,5 +139,24 @@ class AdController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function search()
+    {
+        request()->validate([
+            'search' => 'required|min:3',
+        ]);
+
+        $query = request()->input('search');
+        $words = '%'. $query . '%';
+
+        $ads = [];
+    
+        $ads = Ad::where('title', 'like', $words)->orWhere('content', 'like', $words)->get();
+        //dd($this->ads);
+    
+        return view('ad.search',[
+            'annonces' => $ads
+        ]);
     }
 }

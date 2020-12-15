@@ -26,3 +26,4 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
 
 
 Route::resource("annonce", AdController::class);
+Route::get('/search',[AdController::class,'search'])->name('annonce.search');
